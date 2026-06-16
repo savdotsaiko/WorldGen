@@ -163,30 +163,299 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapGenerator
   drawMode: 1
-  mapWidth: 100
-  mapHeight: 100
-  noiseScale: 27.6
-  octaves: 5
-  persistence: 0.5
-  lacunarity: 2
-  seed: 131
-  offset: {x: 119.8, y: 34.7}
+  mapWidth: 200
+  mapHeight: 200
+  cScale: 40
+  cOctaves: 5
+  cPersistence: 0.5
+  cLacunarity: 1.6
+  continentalnessSpline:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1.0028687
+      inSlope: -15.620935
+      outSlope: -15.620935
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.06405979
+      value: 0.0021948814
+      inSlope: -0.0051764143
+      outSlope: -0.0051764143
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.30841106
+      value: 0.50011426
+      inSlope: 0.03780227
+      outSlope: 0.03780227
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.9823355
+    - serializedVersion: 3
+      time: 0.33648285
+      value: -0.03335598
+      inSlope: 0.040854137
+      outSlope: 0.040854137
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.44034165
+      value: 0.5398601
+      inSlope: 0.027303047
+      outSlope: 0.027303047
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.4774737
+      value: 0.8066724
+      inSlope: 0.46553287
+      outSlope: 0.46553287
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5182204
+      value: 0.8724103
+      inSlope: 0.16298659
+      outSlope: 0.16298659
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.52607304
+    - serializedVersion: 3
+      time: 0.6613015
+      value: 0.92155576
+      inSlope: 0.17794597
+      outSlope: 0.17794597
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.49986193
+      outWeight: 0.21221997
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.23160492
+      outSlope: 0.23160492
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  eScale: 50
+  eOctaves: 4
+  ePersistence: 0.378
+  eLacunarity: 1.93
+  erosionSpline:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.008224487
+      value: 1.0040894
+      inSlope: -3.6033874
+      outSlope: -3.6033874
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.035439573
+    - serializedVersion: 3
+      time: 0.08961141
+      value: 0.73628294
+      inSlope: 0.16083513
+      outSlope: 0.16083513
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.7061603
+    - serializedVersion: 3
+      time: 0.2133928
+      value: 0.60265356
+      inSlope: -0.41975552
+      outSlope: -0.41975552
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.25612974
+      value: 0.66424966
+      inSlope: -2.2796314
+      outSlope: -2.2796314
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.16312252
+    - serializedVersion: 3
+      time: 0.42532018
+      value: 0.14814842
+      inSlope: -0.3132968
+      outSlope: -0.3132968
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.46218494
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6532885
+      value: 0.09596681
+      inSlope: -0.3569385
+      outSlope: -0.3569385
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.66824925
+      value: 0.22088598
+      inSlope: 0.019474037
+      outSlope: 0.019474037
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.7278742
+      value: 0.22272389
+      inSlope: 0.0023132432
+      outSlope: 0.0023132432
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7584179
+      value: 0.10766034
+      inSlope: -0.117759034
+      outSlope: -0.117759034
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.6621429
+    - serializedVersion: 3
+      time: 0.89254206
+      value: 0.035472818
+      inSlope: -0.14536014
+      outSlope: -0.14536014
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.58227646
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9629822
+      value: -0.0006713867
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  pvScale: 5.8
+  pvOctaves: 6
+  pvPersistence: 0.088
+  pvLacunarity: 7.71
+  peaksValleysSpline:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.10850791
+      value: -0.066904835
+      inSlope: 2.545168
+      outSlope: 2.545168
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.17639995
+      value: 0.105891794
+      inSlope: 1.5948564
+      outSlope: 1.5948564
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.33240837
+      value: 0.20644623
+      inSlope: 0.47591513
+      outSlope: 0.47591513
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5568384
+      value: 0.2754103
+      inSlope: 2.3197203
+      outSlope: 2.3197203
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6945011
+      value: 0.87178653
+      inSlope: 0.27670634
+      outSlope: 0.27670634
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7369126
+      value: 0.71152437
+      inSlope: 0.9988766
+      outSlope: 0.9988766
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -0.24080148
+      outSlope: -0.24080148
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.2581913
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  seed: 71
+  offset: {x: 122.5, y: 34.7}
   autoUpdate: 1
   regions:
   - name: waterdeep
-    height: 0.2
+    height: 0.01
     color: {r: 0, g: 0.6294176, b: 0.85660374, a: 1}
   - name: water
-    height: 0.3
+    height: 0.15
     color: {r: 0, g: 0.7329774, b: 1, a: 0}
   - name: sand
-    height: 0.37
+    height: 0.2
     color: {r: 1, g: 0.88398606, b: 0.48867923, a: 0}
   - name: grass
-    height: 0.55
+    height: 0.6
     color: {r: 0, g: 0.6830188, b: 0.017401712, a: 0}
   - name: grass2
-    height: 0.7
+    height: 0.65
     color: {r: 0, g: 0.4490565, b: 0.011416707, a: 1}
   - name: rock
     height: 0.8
@@ -609,7 +878,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 1, z: 100}
+  m_LocalScale: {x: 200, y: 1, z: 200}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
