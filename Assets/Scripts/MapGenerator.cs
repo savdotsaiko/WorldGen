@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    public enum DrawMode { NoiseMap, ColorMap, ContinentalnessMap, ErosionMap, PeaksValleysMap, CombinedNoiseMap }
+    public enum DrawMode { NoiseMap, ColorMap, ContinentalnessMap, ErosionMap, PeaksValleysMap, Mesh }
     public DrawMode drawMode;
 
     public int mapWidth, mapHeight;
@@ -27,6 +27,8 @@ public class MapGenerator : MonoBehaviour
 
     public int seed;
     public Vector2 offset;
+    public float heightMult;
+    public AnimationCurve meshHeightCurve;
     public bool autoUpdate;
     public TerrainType[] regions;
 
@@ -59,8 +61,10 @@ public class MapGenerator : MonoBehaviour
 
         switch (drawMode)
         {
+            case DrawMode.Mesh:
+                display.DrawMesh(MeshGenerator.GenerateTerrainMesh(combinedMap, heightMult, meshHeightCurve), TextureGenerator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
+                break;
             case DrawMode.NoiseMap:
-            case DrawMode.CombinedNoiseMap:
                 display.DrawTexture(TextureGenerator.TextureFromHeightMap(combinedMap));
                 break;
             case DrawMode.ContinentalnessMap:
