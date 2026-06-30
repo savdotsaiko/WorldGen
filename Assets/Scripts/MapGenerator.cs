@@ -5,7 +5,9 @@ public class MapGenerator : MonoBehaviour
     public enum DrawMode { NoiseMap, ColorMap, ContinentalnessMap, ErosionMap, PeaksValleysMap, Mesh }
     public DrawMode drawMode;
 
-    public int mapWidth, mapHeight;
+    const int mapChunkSize = 241;
+    [Range(0, 6)]
+    public int levelOfDetail;
 
     public float cScale;
     public int cOctaves;
@@ -34,23 +36,23 @@ public class MapGenerator : MonoBehaviour
 
     public void GenerateMap()
     {
-        float[,] cMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed, cScale, cOctaves, cPersistence, cLacunarity, offset);
-        float[,] eMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed + 1337, eScale, eOctaves, ePersistence, eLacunarity, offset);
-        float[,] pvMap = Noise.GenerateNoiseMap(mapWidth, mapHeight, seed + 2674, pvScale, pvOctaves, pvPersistence, pvLacunarity, offset);
+        float[,] cMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed, cScale, cOctaves, cPersistence, cLacunarity, offset);
+        float[,] eMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed + 1337, eScale, eOctaves, ePersistence, eLacunarity, offset);
+        float[,] pvMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed + 2674, pvScale, pvOctaves, pvPersistence, pvLacunarity, offset);
 
         float[,] combinedMap = CombineNoiseMaps(cMap, eMap, pvMap);
 
-        Color[] colorMap = new Color[mapWidth * mapHeight];
-        for (int y = 0; y < mapHeight; y++)
+        Color[] colorMap = new Color[mapChunkSize * mapChunkSize];
+        for (int y = 0; y < mapChunkSize; y++)
         {
-            for (int x = 0; x < mapWidth; x++)
+            for (int x = 0; x < mapChunkSize; x++)
             {
                 float currentHeight = combinedMap[x, y];
                 for (int i = 0; i < regions.Length; i++)
                 {
                     if (currentHeight <= regions[i].height)
                     {
-                        colorMap[y * mapWidth + x] = regions[i].color;
+                        colorMap[y * mapChunkSize + x] = regions[i].color;
                         break;
                     }
                 }
@@ -62,7 +64,7 @@ public class MapGenerator : MonoBehaviour
         switch (drawMode)
         {
             case DrawMode.Mesh:
-                display.DrawMesh(MeshGenerator.GenerateTerrainMesh(combinedMap, heightMult, meshHeightCurve), TextureGenerator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
+                display.DrawMesh(MeshGenerator.GenerateTerrainMesh(combinedMap, heightMult, meshHeightCurve, levelOfDetail), TextureGenerator.TextureFromColorMap(colorMap, mapChunkSize, mapChunkSize));
                 break;
             case DrawMode.NoiseMap:
                 display.DrawTexture(TextureGenerator.TextureFromHeightMap(combinedMap));
@@ -77,20 +79,20 @@ public class MapGenerator : MonoBehaviour
                 display.DrawTexture(TextureGenerator.TextureFromHeightMap(pvMap));
                 break;
             case DrawMode.ColorMap:
-                display.DrawTexture(TextureGenerator.TextureFromColorMap(colorMap, mapWidth, mapHeight));
+                display.DrawTexture(TextureGenerator.TextureFromColorMap(colorMap, mapChunkSize, mapChunkSize));
                 break;
         }
     }
 
     float[,] CombineNoiseMaps(float[,] cMap, float[,] eMap, float[,] pvMap)
     {
-        float[,] result = new float[mapWidth, mapHeight];
+        float[,] result = new float[mapChunkSize, mapChunkSize];
         float min = float.MaxValue;
         float max = float.MinValue;
 
-        for (int y = 0; y < mapHeight; y++)
+        for (int y = 0; y < mapChunkSize; y++)
         {
-            for (int x = 0; x < mapWidth; x++)
+            for (int x = 0; x < mapChunkSize; x++)
             {
                 float h = continentalnessSpline.Evaluate(cMap[x, y])
                         + erosionSpline.Evaluate(eMap[x, y])
@@ -102,8 +104,8 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        for (int y = 0; y < mapHeight; y++)
-            for (int x = 0; x < mapWidth; x++)
+        for (int y = 0; y < mapChunkSize; y++)
+            for (int x = 0; x < mapChunkSize; x++)
                 result[x, y] = Mathf.InverseLerp(min, max, result[x, y]);
 
         return result;
@@ -111,8 +113,6 @@ public class MapGenerator : MonoBehaviour
 
     private void OnValidate()
     {
-        if (mapWidth < 1) mapWidth = 1;
-        if (mapHeight < 1) mapHeight = 1;
         if (cLacunarity < 1) cLacunarity = 1;
         if (eLacunarity < 1) eLacunarity = 1;
         if (pvLacunarity < 1) pvLacunarity = 1;

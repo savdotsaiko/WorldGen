@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MeshMat 1
+  m_Shader: {fileID: -6465566751694194690, guid: 590ad4e4064b7d14ebef06b198fc966a, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 2
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _GrassText:
+        m_Texture: {fileID: 2800000, guid: 174576fd30724de4c91ec3b567042b86, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RockText:
+        m_Texture: {fileID: 2800000, guid: 78c1242e4c2bf144aaa0e130ef1df3c1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SandText:
+        m_Texture: {fileID: 2800000, guid: a71a801b7b330f5409be0535e961e91a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SnowText:
+        m_Texture: {fileID: 2800000, guid: 8c662550a54e10649be1684d25a75284, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SurfaceTexts:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterText:
+        m_Texture: {fileID: 2800000, guid: 8846db7dad5d9374caec136f1fe8a43d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _GrassHeight: 4.37
+    - _GrassTintBlend: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _RockBlendHeight: 14.1
+    - _RockHeight: 9.8
+    - _RockTiling: 0.05
+    - _RockTintBlend: 0
+    - _SandBlendHeight: 4.09
+    - _SandHeight: 3.24
+    - _SandTiling: 0.05
+    - _SandTintBlend: 0
+    - _SnowBlendHeight: 28
+    - _SnowHeight: 20
+    - _SnowTiling: 0.05
+    - _SnowTintBlend: 0
+    - _WaterBlendHeight: 3.06
+    - _WaterHeight: 2.3
+    - _WaterTiling: 0.05
+    - _WaterTintBlend: 0
+    - _grassTiling: 0.1
+    - _rockBlendWidth: 38.2
+    m_Colors:
+    - _GrassTint: {r: 0.51875854, g: 1, b: 0, a: 1}
+    - _RockTint: {r: 1, g: 0.6091335, b: 0.1415093, a: 1}
+    - _SandTint: {r: 1, g: 0.68875843, b: 0, a: 1}
+    - _SnowTint: {r: 1, g: 1, b: 1, a: 1}
+    - _WaterTint: {r: 0, g: 1, b: 0.97313666, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!114 &357855773217039367
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
+  version: 10
