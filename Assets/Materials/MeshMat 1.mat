@@ -82,7 +82,7 @@ Material:
     - _WaterHeight: 2.3
     - _WaterTiling: 0.05
     - _WaterTintBlend: 0
-    - _grassTiling: 0.1
+    - _grassTiling: 0.5
     - _rockBlendWidth: 38.2
     m_Colors:
     - _GrassTint: {r: 0.51875854, g: 1, b: 0, a: 1}

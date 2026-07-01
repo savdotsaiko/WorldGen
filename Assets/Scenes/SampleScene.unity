@@ -17,7 +17,7 @@ RenderSettings:
   m_Fog: 1
   m_FogColor: {r: 1, g: 0, b: 0.57638884, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.0005
+  m_FogDensity: 0.0002
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -789,6 +789,7 @@ GameObject:
   - component: {fileID: 410087041}
   - component: {fileID: 410087040}
   - component: {fileID: 410087042}
+  - component: {fileID: 410087043}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -869,13 +870,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.023346893, y: -0.2587434, z: 0.006255781, w: 0.96564364}
+  m_LocalRotation: {x: 0.32179695, y: -0.2440338, z: 0.08622522, w: 0.9107467}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 2.77, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 38.92, y: -30, z: 0}
 --- !u!114 &410087042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -905,6 +906,19 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!114 &410087043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410087039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5416986eb514f3e47b566a8b10443ab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SunDIrGetter
+  skyBoxMat: {fileID: 2100000, guid: b91bc40faf586f540a6ae3795ee09ff8, type: 2}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

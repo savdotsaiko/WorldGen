@@ -55,8 +55,10 @@ Material:
     - _StarCloudOverlapPower: 15.85
     - _StarContrast: 69.9
     - _StarDensity: 21.1
-    - _StarGlowBrightness: -0.04
+    - _StarGlowBrightness: -0.05
     - _StarGlowMovementSpeed: 0.01
+    - _SunBrightness: 74.87
+    - _SunSize: 0.01
     - _ZenithBlend: 0.74
     m_Colors:
     - _Color: {r: 1, g: 0, b: 0.47831392, a: 1}
@@ -65,6 +67,9 @@ Material:
     - _NadirColor: {r: 0, g: 0.20950346, b: 0.645283, a: 1}
     - _Nadith: {r: 0.47198093, g: 1, b: 0, a: 1}
     - _StarTiling: {r: 70, g: 70, b: 0, a: 0}
+    - _SunColor: {r: 4, g: 1.6753926, b: 0, a: 1}
+    - _SunDir: {r: 0, g: 0, b: 0, a: 0}
+    - _SunDirection: {r: 0.38901192, g: 0.62823474, b: -0.6737884, a: 0}
     - _Zenith: {r: 1, g: 1, b: 1, a: 1}
     - _ZenithColor: {r: 1, g: 0.8064474, b: 0, a: 1}
   m_BuildTextureStacks: []
