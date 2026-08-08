@@ -62,24 +62,24 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _GrassHeight: 4.37
+    - _GrassHeight: 8.8
     - _GrassTintBlend: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _RockBlendHeight: 14.1
-    - _RockHeight: 9.8
+    - _RockBlendHeight: 26.6
+    - _RockHeight: 21.18
     - _RockTiling: 0.05
     - _RockTintBlend: 0
-    - _SandBlendHeight: 4.09
-    - _SandHeight: 3.24
+    - _SandBlendHeight: 8.91
+    - _SandHeight: 7
     - _SandTiling: 0.05
     - _SandTintBlend: 0
-    - _SnowBlendHeight: 28
-    - _SnowHeight: 20
+    - _SnowBlendHeight: 49.2
+    - _SnowHeight: 37.6
     - _SnowTiling: 0.05
     - _SnowTintBlend: 0
-    - _WaterBlendHeight: 3.06
-    - _WaterHeight: 2.3
+    - _WaterBlendHeight: 7.24
+    - _WaterHeight: 5.43
     - _WaterTiling: 0.05
     - _WaterTintBlend: 0
     - _grassTiling: 0.5
