@@ -4,7 +4,7 @@ public class MovementTracker : MonoBehaviour
 {
     public static MovementTracker Instance;
 
-    public float stopThreshold = 0.01f;   
+    public float stopThreshold = 0.001f;
     public float stopDelay = 0.5f;        
 
     private Vector3 lastPos;
@@ -21,9 +21,10 @@ public class MovementTracker : MonoBehaviour
 
     void Update()
     {
-        float delta = Vector3.Distance(transform.position, lastPos);
+        double delta = Vector3.Distance(transform.position, lastPos);
         bool movingNow = delta > stopThreshold;
 
+        Debug.Log($"delta={delta:F6} threshold={stopThreshold} moving={movingNow}");
         JustStopped = false; 
 
         if (movingNow)

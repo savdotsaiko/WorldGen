@@ -61,17 +61,17 @@ Material:
     - _SunSize: 0.01
     - _ZenithBlend: 0.74
     m_Colors:
-    - _Color: {r: 1, g: 0, b: 0.47831392, a: 1}
+    - _Color: {r: 0.87169814, g: 0, b: 0.68103456, a: 1}
     - _Horizon: {r: 0, g: 1, b: 0.96715045, a: 1}
-    - _HorizonColor: {r: 1, g: 0, b: 0.17675686, a: 1}
-    - _NadirColor: {r: 0, g: 0.20950346, b: 0.645283, a: 1}
+    - _HorizonColor: {r: 0.4264151, g: 0.0056318752, b: 0.33053663, a: 1}
+    - _NadirColor: {r: 0, g: 0.85455185, b: 0.87169814, a: 1}
     - _Nadith: {r: 0.47198093, g: 1, b: 0, a: 1}
     - _StarTiling: {r: 70, g: 70, b: 0, a: 0}
-    - _SunColor: {r: 1, g: 0.7049574, b: 0.48113203, a: 1}
+    - _SunColor: {r: 1, g: 0.7150943, b: 0.9245765, a: 1}
     - _SunDir: {r: 0, g: 0, b: 0, a: 0}
     - _SunDirection: {r: 0.38901192, g: 0.62823474, b: -0.6737884, a: 0}
     - _Zenith: {r: 1, g: 1, b: 1, a: 1}
-    - _ZenithColor: {r: 1, g: 0.8064474, b: 0, a: 1}
+    - _ZenithColor: {r: 0.78867924, g: 0.66389006, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &1470987328940113491

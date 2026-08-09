@@ -20,7 +20,7 @@ public class LegStepper : MonoBehaviour
         float distanceToMarker = Vector3.Distance(transform.position, moveDistanceMarker.position);
 
         bool needsNormalStep = distanceToMarker > moveThreshold;
-        if (MovementTracker.Instance.JustStopped && distanceToMarker > 0.001f)
+        if (MovementTracker.Instance.JustStopped && distanceToMarker > 0.0001f)
         {
             pendingSettle = true;
         }

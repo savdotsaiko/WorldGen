@@ -1,4 +1,6 @@
 using UnityEngine;
+using Unity.Cinemachine;
+
 public class SpiderDriverController : MonoBehaviour
 {
     public float moveSpeed = 3f;
@@ -8,21 +10,20 @@ public class SpiderDriverController : MonoBehaviour
     public float rayDistance = 5f;
     public Transform movementRoot;
     public BodyOrienter bodyOrienter;
-
-    [Header("Look pitch (camera only, doesn't affect movementRoot)")]
-    public Transform cameraPitchTransform; // child of movementRoot - put your actual Camera under this
     public float pitchSensitivity = 3f;
     public float minPitch = -80f;
     public float maxPitch = 80f;
     public bool invertY = false;
-    private float pitchAngle = 0f;
+    public CinemachineCamera virtualCamera;
 
     [Header("Gizmo settings")]
     public float gizmoLength = 2f;
+
+    private float pitchAngle = 0f;
+    private float yawAngle = 0f;
     private Vector3 lastNormal = Vector3.up;
     private Vector3 lastSlopeForward = Vector3.forward;
     public float FB, LR;
-
     private float turnAngle = 0f;
     private Vector3 trackedTangent;
     private Vector3 lastTurnAxis;
@@ -56,17 +57,13 @@ public class SpiderDriverController : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y");
 
         turnAngle += mouseX * mouseSensitivity;
+        yawAngle += mouseX * mouseSensitivity;
+
+        float pitchInput = invertY ? mouseY : -mouseY;
+        pitchAngle = Mathf.Clamp(pitchAngle + pitchInput * pitchSensitivity, minPitch, maxPitch);
 
         Vector3 newForward = Quaternion.AngleAxis(turnAngle, turnAxis) * trackedTangent;
         movementRoot.rotation = Quaternion.LookRotation(newForward, turnAxis);
-
-        // --- pitch: local to movementRoot, never touches its forward/up ---
-        float pitchInput = invertY ? mouseY : -mouseY;
-        pitchAngle = Mathf.Clamp(pitchAngle + pitchInput * pitchSensitivity, minPitch, maxPitch);
-        if (cameraPitchTransform != null)
-        {
-            cameraPitchTransform.localRotation = Quaternion.AngleAxis(pitchAngle, Vector3.right);
-        }
 
         Vector3 normal = Vector3.up;
         Vector3 origin = transform.position + transform.up * 2f;
@@ -74,14 +71,26 @@ public class SpiderDriverController : MonoBehaviour
         {
             normal = hit.normal;
         }
+
         Vector3 forward = movementRoot.transform.forward;
         Vector3 right = movementRoot.transform.right;
         if (forward.sqrMagnitude < 0.0001f) forward = transform.forward;
+
         transform.position += forward * FB * moveSpeed * Time.deltaTime;
         transform.position += right * LR * moveSpeed * Time.deltaTime;
+
         lastNormal = normal;
         lastSlopeForward = forward;
     }
+
+    void LateUpdate()
+    {
+        Quaternion yaw = Quaternion.LookRotation(movementRoot.forward, movementRoot.up);
+        Quaternion pitch = Quaternion.AngleAxis(pitchAngle, movementRoot.right);
+        if (virtualCamera == null) return;
+        virtualCamera.transform.rotation = pitch * yaw;
+    }
+
     void OnDrawGizmos()
     {
         Vector3 pos = transform.position;
