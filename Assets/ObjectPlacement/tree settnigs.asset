@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ed26b8dc0a917f4e88340ea4878910a, type: 3}
+  m_Name: tree settnigs
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPlacementSettings
+  prefabs:
+  - {fileID: 7825688414393636755, guid: 11f9b8dfe8ebd3f4bb53ba5e4f9d74fa, type: 3}
+  - {fileID: 5966339816827523574, guid: 62eb6c1a030affa4b9fed4a4e430d2d3, type: 3}
+  - {fileID: 3624818621837303570, guid: 0cec683a33d2311459a2f467208d68e6, type: 3}
+  - {fileID: 6827192797196262370, guid: 318c817e350172049bbde7ede2bc9dd1, type: 3}
+  countPerChunk: 340
+  heightMin: 0.3
+  heightMax: 0.6
+  maxSlope: 25
+  scaleMin: 0.5
+  scaleMax: 0.7
+  rotationOffset: {x: -90, y: 0, z: 0}
+  seedOffset: -10

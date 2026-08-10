@@ -15,7 +15,7 @@ public class EndlessWorld : MonoBehaviour
     static MapGenerator mapGenerator;
     int chunkSize;
     int chunksVisibleInViewDistance;
-
+    public Dictionary<Vector2, TerrainChunk> GetAllChunks() => terrainChunkDictionary;
     Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new();
     static List<TerrainChunk> terrainChunksVisibleLastUpdate = new();
     void Start()
@@ -67,11 +67,16 @@ public class EndlessWorld : MonoBehaviour
 
     public class TerrainChunk
     {
-        GameObject meshObject;
-        Vector2 pos;
+        public GameObject MeshObject => meshObject;
+        public Vector2 Position => pos;
+        public MapData MapData => mapData;
+        public bool MapDataReady => mapDataReceived;
+
+         GameObject meshObject;
+         Vector2 pos;
         Bounds bounds;
 
-        MapData mapData;
+         MapData mapData;
 
         MeshRenderer meshRenderer;
         MeshFilter meshFilter;
@@ -80,7 +85,7 @@ public class EndlessWorld : MonoBehaviour
         LODMesh[] lodMeshes;
         LODMesh collisionLODMesh;
 
-        bool mapDataReceived;
+         bool mapDataReceived;
         int previousLODIndex = -1;
         public TerrainChunk(Vector2 coord, int size, LevelOfDetailInfo[] detailLevel, Transform parent, Material mat)
         {

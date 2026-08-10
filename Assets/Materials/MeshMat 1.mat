@@ -66,20 +66,20 @@ Material:
     - _GrassTintBlend: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _RockBlendHeight: 26.6
-    - _RockHeight: 21.18
+    - _RockBlendHeight: 41.4
+    - _RockHeight: 33.6
     - _RockTiling: 0.05
     - _RockTintBlend: 0
-    - _SandBlendHeight: 8.91
-    - _SandHeight: 7
+    - _SandBlendHeight: 22.1
+    - _SandHeight: 18.9
     - _SandTiling: 0.05
     - _SandTintBlend: 0
-    - _SnowBlendHeight: 49.2
-    - _SnowHeight: 37.6
+    - _SnowBlendHeight: 87.5
+    - _SnowHeight: 73.2
     - _SnowTiling: 0.05
     - _SnowTintBlend: 0
-    - _WaterBlendHeight: 7.24
-    - _WaterHeight: 5.43
+    - _WaterBlendHeight: 17.8
+    - _WaterHeight: 13.1
     - _WaterTiling: 0.05
     - _WaterTintBlend: 0
     - _grassTiling: 0.5

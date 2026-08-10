@@ -24,7 +24,6 @@ public class MovementTracker : MonoBehaviour
         double delta = Vector3.Distance(transform.position, lastPos);
         bool movingNow = delta > stopThreshold;
 
-        Debug.Log($"delta={delta:F6} threshold={stopThreshold} moving={movingNow}");
         JustStopped = false; 
 
         if (movingNow)

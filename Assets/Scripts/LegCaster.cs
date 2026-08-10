@@ -11,21 +11,28 @@ public class LegCaster : MonoBehaviour
     public SpiderDriverController driverController;
     public float obstacleCheckDistance = 1.5f;
     public float obstacleCheckHeight = 0.5f;
-    public LayerMask obstacleMask;
+    public LayerMask climbableObstacleMask;
 
+    public bool grounded;
     [Header("Fallback fan search")]
     public int fanRayCount = 6;
     public float fanAngle = 45f; // max degrees to tilt away from main direction
 
     public Vector3 GroundNormal { get; private set; } = Vector3.up;
+    private LegStepper _stepper;
 
+    void Awake()
+    {
+        _stepper = GetComponent<LegStepper>();
+    }
     void Update()
     {
+        if (_stepper != null && _stepper.isStepping) return;
         Vector3 desiredPos = body.position + (body.rotation * localOffset);
         Vector3 origin = desiredPos + body.up * rayStartHeight;
         Vector3 castDir = -body.up;
 
-        Debug.DrawLine(desiredPos, origin, Color.yellow);
+        Debug.DrawLine(desiredPos, origin, Color.purple);
         Debug.DrawRay(origin, castDir * rayDistance, Color.red);
 
 
@@ -34,23 +41,21 @@ public class LegCaster : MonoBehaviour
 
         Vector3 moveDir = movementRoot.forward;
 
-        if (driverController.FB < 0)
+        if (driverController != null && driverController.enabled)
         {
-            moveDir = -movementRoot.forward;
-        }
-        else if(driverController.LR < 0)
-        {
-            moveDir = -movementRoot.right;
-        }
-        else if (driverController.LR > 0)
-        {
-            moveDir = movementRoot.right;
+            if (driverController.FB < 0)
+                moveDir = -movementRoot.forward;
+            else if (driverController.LR < 0)
+                moveDir = -movementRoot.right;
+            else if (driverController.LR > 0)
+                moveDir = movementRoot.right;
         }
 
 
-        bool obstacleAhead =
+        bool climbableObstacleAhead =
     Physics.Raycast(forwardOrigin, moveDir, out obstacleHit,
-                    obstacleCheckDistance, obstacleMask);
+                    obstacleCheckDistance, climbableObstacleMask);
+        
 
         Debug.DrawRay(forwardOrigin, movementRoot.forward * obstacleCheckDistance, Color.white);
         Debug.DrawRay(forwardOrigin, -movementRoot.forward * obstacleCheckDistance, Color.white);
@@ -64,7 +69,7 @@ public class LegCaster : MonoBehaviour
             transform.position = hit.point;
             GroundNormal = hit.normal;
             Debug.DrawRay(hit.point, hit.normal * 1f, Color.green);
-            if (!obstacleAhead)
+            if (!climbableObstacleAhead)
                 return;
         }
 
@@ -81,7 +86,7 @@ public class LegCaster : MonoBehaviour
             {
                 float d;
 
-                if (obstacleAhead)
+                if (climbableObstacleAhead)
                 {
                     d = Vector3.Distance(fanHit.point, obstacleHit.point);
                 }
@@ -103,8 +108,49 @@ public class LegCaster : MonoBehaviour
         {
             transform.position = bestHit.point;
             GroundNormal = bestHit.normal;
-            Debug.DrawRay(bestHit.point, bestHit.normal * 1f, Color.green);
+            Debug.DrawRay(bestHit.point, bestHit.normal * 1f, Color.purple);
         }
+        //GroundCorrect();
         // if nothing found at all, foot just stays exactly where it was last frame — no snapping, no falling through
+    }
+
+    public void GroundCorrect()
+    {
+        float checkRadius = 0.1f;
+        float snapSpeed = 5f;
+
+        // Check if touching ground from above (normal) or below (upside down)
+        bool touchingFromAbove = Physics.Raycast(
+            driverController.transform.position + Vector3.up * 0.1f, Vector3.down, checkRadius, LayerMask.GetMask("Ground"));
+        bool touchingFromBelow = Physics.Raycast(
+            driverController.transform.position - Vector3.up * 0.1f, Vector3.up, checkRadius, LayerMask.GetMask("Ground"));
+        grounded = true;
+        if (touchingFromAbove || touchingFromBelow) return;
+        grounded = false;
+        // Not touching ground at all — find it
+        RaycastHit upHit, downHit;
+        bool hitAbove = Physics.Raycast(driverController.transform.position, Vector3.up, out upHit, Mathf.Infinity, LayerMask.GetMask("Ground"));
+        bool hitBelow = Physics.Raycast(driverController.transform.position, Vector3.down, out downHit, Mathf.Infinity, LayerMask.GetMask("Ground"));
+
+        if (hitAbove && hitBelow)
+        {
+            // Pick whichever surface is closer
+            float distUp = upHit.distance;
+            float distDown = downHit.distance;
+            Vector3 target = distDown <= distUp ? downHit.point : upHit.point;
+            driverController.transform.position = Vector3.MoveTowards(driverController.transform.position, target, snapSpeed * Time.deltaTime);
+        }
+        else if (hitBelow)
+        {
+            driverController.transform.position = Vector3.MoveTowards(
+                driverController.transform.position, downHit.point, snapSpeed * Time.deltaTime);
+        }
+        else if (hitAbove)
+        {
+            Debug.Log("below ground");
+            // Below ground — move up toward surface
+            driverController.transform.position = Vector3.MoveTowards(
+                driverController.transform.position, upHit.point, snapSpeed * Time.deltaTime);
+        }
     }
 }

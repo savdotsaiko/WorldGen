@@ -8,8 +8,8 @@ public class LegStepper : MonoBehaviour
     public float stepDuration = 0.2f;
     public float stepHeight = 0.5f;
     public int groupID = 0;
-
-    private bool isStepping = false;
+    public float maxStretchDistance = 8f;
+    public bool isStepping = false;
     private bool pendingSettle = false;
 
     void Update()
@@ -18,16 +18,22 @@ public class LegStepper : MonoBehaviour
         if (isStepping) return;
 
         float distanceToMarker = Vector3.Distance(transform.position, moveDistanceMarker.position);
-
         bool needsNormalStep = distanceToMarker > moveThreshold;
+
         if (MovementTracker.Instance.JustStopped && distanceToMarker > 0.0001f)
-        {
             pendingSettle = true;
+
+        if (distanceToMarker > moveThreshold * 2.5f)
+        {
+            StartCoroutine(StepTo(moveDistanceMarker.position));
+            pendingSettle = false;
+            return;
         }
+
         if ((needsNormalStep || pendingSettle) && WalkGroupController.Instance.CanStep(groupID))
         {
             StartCoroutine(StepTo(moveDistanceMarker.position));
-            pendingSettle = false; 
+            pendingSettle = false;
         }
     }
 

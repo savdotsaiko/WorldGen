@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ed26b8dc0a917f4e88340ea4878910a, type: 3}
+  m_Name: rock settings
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPlacementSettings
+  prefabs:
+  - {fileID: 7829756728741100956, guid: 5b5542dfb6c76b7438a22539e64618c5, type: 3}
+  - {fileID: 2785704453399386952, guid: 46c7b0f80aeb0034a9efb71598c4726e, type: 3}
+  - {fileID: 7475607262741382842, guid: 154b1c3fceb77e64790b051fff0bf7d1, type: 3}
+  - {fileID: 3391698319538164174, guid: 3003343ad45368b40ae18a4d8cddfb7c, type: 3}
+  - {fileID: 4490188049050147224, guid: 7b73c5a9ec8230341b8e45643e405439, type: 3}
+  - {fileID: 493550207504941093, guid: 5c6a24a0308f52c4e9584fdd998f9dac, type: 3}
+  countPerChunk: 600
+  heightMin: 0.1
+  heightMax: 1
+  maxSlope: 75
+  scaleMin: 0.8
+  scaleMax: 1.4
+  rotationOffset: {x: 0, y: 0, z: 0}
+  seedOffset: -5

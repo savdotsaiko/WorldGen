@@ -21,6 +21,7 @@ public class BodyOrienter : MonoBehaviour
         int count = 0;
         foreach (var legCast in legCasters)
         {
+            //if (!legCast.grounded) return; // if any leg i
             rawAvgNormal += legCast.GroundNormal;
             count++;
         }
@@ -59,5 +60,7 @@ public class BodyOrienter : MonoBehaviour
         Quaternion desiredWorldRot = Quaternion.LookRotation(forwardFlat, avgNormal);
         Quaternion desiredLocalRot = Quaternion.Inverse(transform.parent.rotation) * desiredWorldRot;
         transform.localRotation = Quaternion.Slerp(transform.localRotation, desiredLocalRot, Time.deltaTime * rotationSmoothSpeed);
+        
     }
+    
 }

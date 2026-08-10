@@ -4,6 +4,7 @@ using Unity.Cinemachine;
 public class SpiderDriverController : MonoBehaviour
 {
     public float moveSpeed = 3f;
+    public float halfMoveSpeed;
     public float turnSpeed = 100f;
     public float mouseSensitivity = 3f;
     public LayerMask groundMask;
@@ -29,10 +30,33 @@ public class SpiderDriverController : MonoBehaviour
     private Vector3 lastTurnAxis;
     private bool hasLastTurnAxis = false;
 
+    [Header("Obstacle blocking")]
+    public LayerMask obstacleMask;
+    public float obstacleCheckDistance = 1f;
+    public float obstacleCheckHeight = 0.5f;
+
+    private void Start()
+    {
+        halfMoveSpeed = moveSpeed * 0.7071f; // 1/sqrt(2) for diagonal movement
+    }
+    bool IsBlocked(Vector3 moveDir)
+    {
+        if (moveDir.sqrMagnitude < 0.0001f) return false;
+        Vector3 origin = transform.position + movementRoot.up * obstacleCheckHeight;
+        return Physics.Raycast(origin, moveDir, obstacleCheckDistance, obstacleMask);
+    }
+
     void Update()
     {
         LR = Input.GetAxis("Horizontal");
         FB = Input.GetAxis("Vertical");
+
+        Vector3 desiredDir = (movementRoot.forward * FB + movementRoot.right * LR);
+        if (desiredDir.sqrMagnitude > 0.0001f && IsBlocked(desiredDir.normalized))
+        {
+            FB = 0;
+            LR = 0;
+        }
 
         Vector3 turnAxis = bodyOrienter != null ? bodyOrienter.CurrentSurfaceNormal : Vector3.up;
 
@@ -76,8 +100,10 @@ public class SpiderDriverController : MonoBehaviour
         Vector3 right = movementRoot.transform.right;
         if (forward.sqrMagnitude < 0.0001f) forward = transform.forward;
 
-        transform.position += forward * FB * moveSpeed * Time.deltaTime;
-        transform.position += right * LR * moveSpeed * Time.deltaTime;
+        float moveSpeedtoApply = moveSpeed;
+        if (LR != 0 && FB != 0) moveSpeedtoApply = halfMoveSpeed; else moveSpeedtoApply = moveSpeed;
+        transform.position += forward * FB * moveSpeedtoApply * Time.deltaTime;
+        transform.position += right * LR * moveSpeedtoApply * Time.deltaTime;
 
         lastNormal = normal;
         lastSlopeForward = forward;

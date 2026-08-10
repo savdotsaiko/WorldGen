@@ -46,15 +46,15 @@ Material:
     - _QueueOffset: 0
     - _RIppleContrast: 32.8
     - _RIppleSpeed: 2
-    - _RippleDensity: 23.63
-    - _WaveScale: 2.65
+    - _RippleDensity: 84
+    - _WaveScale: 3.87
     - _WaveSpeed: 0.12
     - _clampMax: 1
     - _clampMin: 0.72
     m_Colors:
     - _BaseColor: {r: 0, g: 0.2493229, b: 0.3056603, a: 1}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
-    - _RemapWave: {r: 0, g: 0.1, b: 0, a: 0}
+    - _RemapWave: {r: 0, g: 0.02, b: 0, a: 0}
     - _RippleColor: {r: 11.181762, g: 11.181762, b: 11.181762, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
