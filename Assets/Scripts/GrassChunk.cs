@@ -16,6 +16,7 @@ public class GrassChunk : MonoBehaviour
     private Material _material;
     private Mesh _mesh;
     private int _instanceCount;
+    public int InstanceCount => _instanceCount;
     private bool _ready = false;
     private Bounds _drawBounds;
     public LayerMask groundMask;

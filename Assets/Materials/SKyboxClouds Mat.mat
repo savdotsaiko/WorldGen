@@ -45,14 +45,14 @@ Material:
     - _CloudContrast: 2
     - _Color: 0
     - _DistanceFade: 0.26
-    - _NadirBlend: 0.3
+    - _NadirBlend: 0.14
     - _NadithBlend: 0.3
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Scale: 0.1
     - _Speed: 0.05
     - _StarBrightness: 100
-    - _StarCloudOverlapPower: 15.85
+    - _StarCloudOverlapPower: 23.1
     - _StarContrast: 69.9
     - _StarDensity: 21.1
     - _StarGlowBrightness: -0.05
@@ -64,13 +64,13 @@ Material:
     - _Color: {r: 0.87169814, g: 0, b: 0.68103456, a: 1}
     - _Horizon: {r: 0, g: 1, b: 0.96715045, a: 1}
     - _HorizonColor: {r: 0.4264151, g: 0.0056318752, b: 0.33053663, a: 1}
-    - _NadirColor: {r: 0, g: 0.85455185, b: 0.87169814, a: 1}
+    - _NadirColor: {r: 0.427451, g: 0.003921569, b: 0.32941177, a: 1}
     - _Nadith: {r: 0.47198093, g: 1, b: 0, a: 1}
     - _StarTiling: {r: 70, g: 70, b: 0, a: 0}
     - _SunCol: {r: 1, g: 0.9864707, b: 0.9490196, a: 1}
     - _SunColor: {r: 1, g: 0.7150943, b: 0.9245765, a: 1}
     - _SunDir: {r: 0, g: 0, b: 0, a: 0}
-    - _SunDirection: {r: 0.38901192, g: 0.62823474, b: -0.6737884, a: 0}
+    - _SunDirection: {r: 0.49240372, g: 0.17364828, b: -0.8528686, a: 0}
     - _Zenith: {r: 1, g: 1, b: 1, a: 1}
     - _ZenithColor: {r: 0.78867924, g: 0.66389006, b: 0, a: 1}
   m_BuildTextureStacks: []

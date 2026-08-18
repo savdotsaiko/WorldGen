@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class ObjectChunk : MonoBehaviour
 {
     private List<GameObject> _spawnedObjects = new();
+    public int SpawnedCount => _spawnedObjects.Count;
 
     public void Initialise(float chunkSize, Vector3 origin, float[,] heightMap,
         float heightMultiplier, AnimationCurve heightCurve,
@@ -46,7 +47,6 @@ public class ObjectChunk : MonoBehaviour
             obj.transform.localScale = prefab.transform.localScale * scaleMult;
             _spawnedObjects.Add(obj);
         }
-        Debug.Log($"ObjectChunk: spawned {_spawnedObjects.Count} objects");
     }
 
     void OnDestroy()

@@ -8,13 +8,17 @@ public class LegStepper : MonoBehaviour
     public float stepDuration = 0.2f;
     public float stepHeight = 0.5f;
     public int groupID = 0;
-    public float maxStretchDistance = 8f;
     public bool isStepping = false;
     private bool pendingSettle = false;
+    public WalkGroupController _walkGroup;
+
+    void Awake()
+    {
+    }
 
     void Update()
     {
-        if (WalkGroupController.Instance == null) return;
+        if (_walkGroup == null) return;
         if (isStepping) return;
 
         float distanceToMarker = Vector3.Distance(transform.position, moveDistanceMarker.position);
@@ -30,7 +34,7 @@ public class LegStepper : MonoBehaviour
             return;
         }
 
-        if ((needsNormalStep || pendingSettle) && WalkGroupController.Instance.CanStep(groupID))
+        if ((needsNormalStep || pendingSettle) && _walkGroup.CanStep(groupID))
         {
             StartCoroutine(StepTo(moveDistanceMarker.position));
             pendingSettle = false;
@@ -40,7 +44,9 @@ public class LegStepper : MonoBehaviour
     IEnumerator StepTo(Vector3 targetPos)
     {
         isStepping = true;
-        WalkGroupController.Instance.RegisterStepStart(groupID);
+        _walkGroup.RegisterStepStart(groupID);
+        //GetComponent<AudioSource>().PlayOneShot(AudioStore.Instance.MetalStepAudios[Random.Range(0, AudioStore.Instance.MetalStepAudios.Length)]);
+        GetComponent<AudioSource>().PlayOneShot(AudioStore.Instance.GrassFootStepAudios[Random.Range(0, AudioStore.Instance.GrassFootStepAudios.Length)]);
 
         Vector3 startPos = transform.position;
         float elapsed = 0f;
@@ -60,6 +66,6 @@ public class LegStepper : MonoBehaviour
 
         transform.position = targetPos;
         isStepping = false;
-        WalkGroupController.Instance.RegisterStepEnd(groupID);
+        _walkGroup.RegisterStepEnd(groupID);
     }
 }

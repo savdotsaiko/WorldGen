@@ -25,32 +25,34 @@ public class ObjectChunkManager : MonoBehaviour
         _timer = 0f;
 
         var chunks = _endlessWorld.GetAllChunks();
-
-        foreach (var kvp in chunks)
+        if (chunks != null)
         {
-            Vector2 coord = kvp.Key;
-            EndlessWorld.TerrainChunk chunk = kvp.Value;
-            if (!chunk.MapDataReady) continue;
 
-            float dist = Vector3.Distance(viewer.position,
-                new Vector3(chunk.Position.x, 0, chunk.Position.y));
+            foreach (var kvp in chunks)
+            {
+                Vector2 coord = kvp.Key;
+                EndlessWorld.TerrainChunk chunk = kvp.Value;
+                if (!chunk.MapDataReady) continue;
 
-            if (dist < spawnDistance)
-            {
-                if (!_active.ContainsKey(coord))
-                    Spawn(coord, chunk);
-            }
-            else
-            {
-                if (_active.ContainsKey(coord))
-                    Despawn(coord);
+                float dist = Vector3.Distance(viewer.position,
+                    new Vector3(chunk.Position.x, 0, chunk.Position.y));
+
+                if (dist < spawnDistance)
+                {
+                    if (!_active.ContainsKey(coord))
+                        Spawn(coord, chunk);
+                }
+                else
+                {
+                    if (_active.ContainsKey(coord))
+                        Despawn(coord);
+                }
             }
         }
     }
 
     void Spawn(Vector2 coord, EndlessWorld.TerrainChunk chunk)
     {
-        Debug.Log($"Spawning objects at {coord}");
         int chunkSize = MapGenerator.mapChunkSize - 1;
         Vector3 origin = new Vector3(
             chunk.Position.x - chunkSize * 0.5f, 0,

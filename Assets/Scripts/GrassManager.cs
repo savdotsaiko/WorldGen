@@ -36,27 +36,29 @@ public class GrassManager : MonoBehaviour
     void UpdateGrass()
     {
         var chunks = _endlessWorld.GetAllChunks();
-
-        foreach (var kvp in chunks)
+        if (chunks != null)
         {
-            Vector2 coord = kvp.Key;
-            EndlessWorld.TerrainChunk chunk = kvp.Value;
-
-            if (!chunk.MapDataReady) continue;
-
-            float dist = Vector3.Distance(
-                viewer.position,
-                new Vector3(chunk.Position.x, 0, chunk.Position.y));
-
-            if (dist < grassUpdateDistance)
+            foreach (var kvp in chunks)
             {
-                if (!_activeGrass.ContainsKey(coord))
-                    AddGrass(coord, chunk);
-            }
-            else
-            {
-                if (_activeGrass.ContainsKey(coord))
-                    RemoveGrass(coord);
+                Vector2 coord = kvp.Key;
+                EndlessWorld.TerrainChunk chunk = kvp.Value;
+
+                if (!chunk.MapDataReady) continue;
+
+                float dist = Vector3.Distance(
+                    viewer.position,
+                    new Vector3(chunk.Position.x, 0, chunk.Position.y));
+
+                if (dist < grassUpdateDistance)
+                {
+                    if (!_activeGrass.ContainsKey(coord))
+                        AddGrass(coord, chunk);
+                }
+                else
+                {
+                    if (_activeGrass.ContainsKey(coord))
+                        RemoveGrass(coord);
+                }
             }
         }
     }

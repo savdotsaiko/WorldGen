@@ -31,21 +31,33 @@ public class SpiderAI : MonoBehaviour
     public GameObject[] disguisePrefabs;
     public float disguiseScaleMultiplier = 1f;
 
+    [Header("Health")]
+    public int hitPoints = 1;
+
+    public Renderer mainRenderer;
+
+
     private enum HuntState { Moving, Stopping, Disguised }
     private HuntState _huntState = HuntState.Moving;
     private float _settleTimer = 0f;
-    public float settleTime = 0.4f; 
+    public float settleTime = 0.3f;
 
     private Vector3 _lastPos;
     private float _stopCheckTimer = 0f;
 
-    private bool _isDetected = false;
+    public bool _isDetected = false, stopFollowing = false;
     private GameObject _activeDisguise;
     private Renderer[] _ownRenderers;
     private Dictionary<GameObject, Queue<GameObject>> _pool = new();
     private GameObject _activeDisguisePrefab;
 
-    void Awake()
+    private void Awake()
+    {
+        if (mainRenderer != null)
+            mainRenderer.material = new Material(mainRenderer.material);
+    }
+
+    void Start()
     {
         _ownRenderers = GetComponentsInChildren<Renderer>();
 
@@ -60,10 +72,12 @@ public class SpiderAI : MonoBehaviour
 
         SpiderFormation.Instance.Register(this);
         player = GameObject.FindWithTag("Player").transform;
-    }
-    void Start()
-    {
         SnapToGround();
+    }
+
+    void Update()
+    {
+        if (player == null) return;
     }
     GameObject GetFromPool(GameObject prefab)
     {
@@ -82,7 +96,6 @@ public class SpiderAI : MonoBehaviour
                 Quaternion.Euler(0, Random.Range(0f, 360f), 0), transform);
         }
 
-        // Disable physics on disguise objects
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         Collider col = obj.GetComponent<Collider>();
         if (rb != null)
@@ -108,10 +121,6 @@ public class SpiderAI : MonoBehaviour
     }
     public void AssignSlot(float angle) => _slotAngle = angle;
 
-    void Update()
-    {
-        if (player == null) return;
-    }
 
     public void StartHunting()
     {
@@ -120,9 +129,11 @@ public class SpiderAI : MonoBehaviour
     }
     public void DoNormalFollow()
     {
-        ShowSelf();
+        if (stopFollowing) return;
 
-        // Use fixed world angles instead of player.forward
+        ShowSelf();
+        Disguise(true);
+
         Quaternion slotRot = Quaternion.AngleAxis(_slotAngle, Vector3.up);
         Vector3 slotOffset = slotRot * (Vector3.back * followDistance);
         Vector3 targetPos = player.position + slotOffset;
@@ -131,7 +142,10 @@ public class SpiderAI : MonoBehaviour
         Vector3 currentXZ = new Vector3(transform.position.x, 0, transform.position.z);
         Vector3 targetXZ = new Vector3(targetPos.x, 0, targetPos.z);
         float dist = Vector3.Distance(currentXZ, targetXZ);
-        float speed = Mathf.Max(moveSpeed, dist * 4f);
+
+        if (dist > 1f)
+            SnapToGround();
+        float speed = moveSpeed;
 
         Vector3 newXZ = Vector3.MoveTowards(currentXZ, targetXZ, speed * Time.deltaTime);
         transform.position = new Vector3(newXZ.x, transform.position.y, newXZ.z);
@@ -145,6 +159,7 @@ public class SpiderAI : MonoBehaviour
 
     public void DoHuntMode()
     {
+        if (stopFollowing) return;
         _isDetected = IsPlayerLookingAtMe();
 
         switch (_huntState)
@@ -176,7 +191,7 @@ public class SpiderAI : MonoBehaviour
                 if (_settleTimer >= settleTime)
                 {
                     _huntState = HuntState.Disguised;
-                    Disguise();
+                    Disguise(false);
                 }
                 break;
 
@@ -192,6 +207,7 @@ public class SpiderAI : MonoBehaviour
 
     public void CreepTowardPlayer()
     {
+        if (stopFollowing) return;
         Quaternion slotRot = Quaternion.AngleAxis(_slotAngle, Vector3.up);
         Vector3 slotOffset = slotRot * (Vector3.back * followDistance);
         Vector3 targetPos = player.position + slotOffset;
@@ -207,10 +223,10 @@ public class SpiderAI : MonoBehaviour
                 Quaternion.LookRotation(toPlayer), turnSpeed * Time.deltaTime);
     }
 
-    void Disguise()
+    void Disguise(bool half)
     {
         foreach (var r in _ownRenderers) r.enabled = false;
-
+        if (half) return;
         if (_activeDisguise == null && disguisePrefabs != null && disguisePrefabs.Length > 0)
         {
             // Use instance ID as part of seed so each spider picks differently
@@ -243,6 +259,46 @@ public class SpiderAI : MonoBehaviour
         SnapToGround();
 
     }
+    public void SetWinColor(bool red)
+    {
+        if (mainRenderer != null)
+            mainRenderer.material.color = red ? Color.red : Color.white;
+    }
+    public void Revive()
+    {
+        hitPoints = 3;
+        _huntState = HuntState.Moving;
+        _activeDisguise = null;
+        _activeDisguisePrefab = null;
+
+        if (mainRenderer != null)
+            mainRenderer.enabled = true;
+
+        foreach (var r in _ownRenderers)
+            r.enabled = true;
+
+        enabled = true;
+        SpiderFormation.Instance?.Register(this);
+    }
+    public void TakeHit()
+    {
+        hitPoints--;
+
+        if (hitPoints <= 0)
+            Die();
+    }
+
+    void Die()
+    {
+        SpiderFormation.Instance?.Unregister(this);
+
+        ShowSelf();
+        if (mainRenderer != null)
+            mainRenderer.enabled = false;
+
+
+        enabled = false;
+    }
 
     bool IsPlayerLookingAtMe()
     {
@@ -267,7 +323,6 @@ public class SpiderAI : MonoBehaviour
 
         if (Physics.Raycast(eyePos, dir, out RaycastHit hit, dist, LayerMask.GetMask("Ground")))
         {
-            Debug.Log($"Blocked by {hit.collider.name} on layer {LayerMask.LayerToName(hit.collider.gameObject.layer)}");
             return false;
         }
         Debug.DrawLine(eyePos, spiderPos, Color.red);
@@ -277,18 +332,19 @@ public class SpiderAI : MonoBehaviour
     public void SnapToGround()
     {
         GetComponentInChildren<BodyOrienter>().enabled = false;
-        Vector3 rayOrigin = transform.position + Vector3.up * 5f;
+        Vector3 rayOrigin = transform.position + Vector3.up * 5000f;
         var rayDown = Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hitDown, Mathf.Infinity,
             LayerMask.GetMask("Ground"));
         var rayUp = Physics.Raycast(rayOrigin, Vector3.up, out RaycastHit hitUp, Mathf.Infinity,
             LayerMask.GetMask("Ground"));
-
         Vector3 pos = transform.position;
         if (rayDown)
         {
             pos.y = hitDown.point.y;
-        } else if (rayUp)
+        }
+        else if (rayUp)
         {
+
             pos.y = hitUp.point.y;
         }
         transform.position = pos;
@@ -296,9 +352,4 @@ public class SpiderAI : MonoBehaviour
 
     }
 
-    void OnDestroy()
-    {
-        SpiderFormation.Instance?.Unregister(this);
-        if (_activeDisguise != null) Destroy(_activeDisguise);
-    }
 }

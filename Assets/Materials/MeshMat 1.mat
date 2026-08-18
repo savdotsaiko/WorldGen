@@ -74,8 +74,8 @@ Material:
     - _SandHeight: 18.9
     - _SandTiling: 0.05
     - _SandTintBlend: 0
-    - _SnowBlendHeight: 87.5
-    - _SnowHeight: 73.2
+    - _SnowBlendHeight: 120.6
+    - _SnowHeight: 90.2
     - _SnowTiling: 0.05
     - _SnowTintBlend: 0
     - _WaterBlendHeight: 17.8

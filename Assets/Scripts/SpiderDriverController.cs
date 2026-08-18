@@ -37,7 +37,8 @@ public class SpiderDriverController : MonoBehaviour
 
     private void Start()
     {
-        halfMoveSpeed = moveSpeed * 0.7071f; // 1/sqrt(2) for diagonal movement
+        halfMoveSpeed = moveSpeed * 0.7071f; 
+        
     }
     bool IsBlocked(Vector3 moveDir)
     {
@@ -81,7 +82,6 @@ public class SpiderDriverController : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y");
 
         turnAngle += mouseX * mouseSensitivity;
-        yawAngle += mouseX * mouseSensitivity;
 
         float pitchInput = invertY ? mouseY : -mouseY;
         pitchAngle = Mathf.Clamp(pitchAngle + pitchInput * pitchSensitivity, minPitch, maxPitch);
@@ -108,7 +108,31 @@ public class SpiderDriverController : MonoBehaviour
         lastNormal = normal;
         lastSlopeForward = forward;
     }
+    public void SnapToGround()
+    {
+        Debug.Log("SNAPPING");
+        GetComponentInChildren<BodyOrienter>().enabled = false;
+        Vector3 rayOrigin = transform.position + Vector3.up * 50000f;
+        var rayDown = Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hitDown, Mathf.Infinity,
+            LayerMask.GetMask("Ground"));
+        var rayUp = Physics.Raycast(rayOrigin, Vector3.up, out RaycastHit hitUp, Mathf.Infinity,
+            LayerMask.GetMask("Ground"));
 
+        Vector3 pos = transform.position;
+        if (rayDown)
+        {
+            Debug.Log(hitDown.collider.gameObject.name);
+            pos.y = hitDown.point.y;
+        }
+        else if (rayUp)
+        {
+            Debug.Log("Hit up at: " + hitUp.point);
+            pos.y = hitUp.point.y;
+        }
+        transform.position = pos;
+        GetComponentInChildren<BodyOrienter>().enabled = true;
+
+    }
     void LateUpdate()
     {
         Quaternion yaw = Quaternion.LookRotation(movementRoot.forward, movementRoot.up);

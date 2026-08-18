@@ -1,7 +1,8 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 public class EndlessWorld : MonoBehaviour
 {
+    public static int currentGenerationVersion = 0;
     const float scale = 1;
     const float chunkUpdateThreshold = 25f;
     const float sqrchunkUpdateThreshold = chunkUpdateThreshold * chunkUpdateThreshold;
@@ -15,7 +16,8 @@ public class EndlessWorld : MonoBehaviour
     static MapGenerator mapGenerator;
     int chunkSize;
     int chunksVisibleInViewDistance;
-    public Dictionary<Vector2, TerrainChunk> GetAllChunks() => terrainChunkDictionary;
+    public Dictionary<Vector2, TerrainChunk> GetAllChunks() => allChunksLoaded ? terrainChunkDictionary : null;
+    private bool allChunksLoaded = false;
     Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new();
     static List<TerrainChunk> terrainChunksVisibleLastUpdate = new();
     void Start()
@@ -23,18 +25,49 @@ public class EndlessWorld : MonoBehaviour
         chunkSize = MapGenerator.mapChunkSize - 1;
         maxViewDistance = detailLevels[detailLevels.Length - 1].threshold;
         chunksVisibleInViewDistance = Mathf.RoundToInt(maxViewDistance / chunkSize);
-        mapGenerator = Object.FindFirstObjectByType<MapGenerator>();
+        mapGenerator = FindFirstObjectByType<MapGenerator>();
         UpdateChunks();
     }
+
 
     private void Update()
     {
         viewerPosition = new Vector2(viewer.position.x, viewer.position.z) / scale;
-        if((viewerPositionold - viewerPosition).sqrMagnitude > sqrchunkUpdateThreshold)
+        if ((viewerPositionold - viewerPosition).sqrMagnitude > sqrchunkUpdateThreshold)
         {
             viewerPositionold = viewerPosition;
             UpdateChunks();
         }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RegenerateWorld();
+        }
+        if (!allChunksLoaded)
+        {
+            foreach (var chunk in terrainChunkDictionary.Values)
+            {
+                if (chunk.MeshReady)
+                {
+                    allChunksLoaded = true;
+                    break;
+                }
+            }
+        }
+    }
+    private int generationVersion = 0;
+    public void RegenerateWorld()
+    {
+        currentGenerationVersion++; // add this — invalidates all in-flight requests from before this call
+        allChunksLoaded = false;
+        FindFirstObjectByType<SpiderFormation>().SnapAllSpiders();
+        mapGenerator.seed = Random.Range(0, int.MaxValue);
+
+        foreach (var chunk in terrainChunkDictionary.Values)
+            Destroy(chunk.MeshObject);
+
+        terrainChunkDictionary.Clear();
+        terrainChunksVisibleLastUpdate.Clear();
+        UpdateChunks();
     }
     void UpdateChunks()
     {
@@ -59,24 +92,36 @@ public class EndlessWorld : MonoBehaviour
                 }
                 else
                 {
-                    terrainChunkDictionary.Add(viewedChunkCoord, new TerrainChunk(viewedChunkCoord, chunkSize, detailLevels, transform, mapMaterial));
+                    terrainChunkDictionary.Add(viewedChunkCoord, new TerrainChunk(viewedChunkCoord, chunkSize, detailLevels, transform, mapMaterial, currentGenerationVersion));
                 }
             }
         }
     }
+    public TerrainChunk GetChunkAt(Vector2 worldPosXZ)
+    {
+        int cx = Mathf.RoundToInt(worldPosXZ.x / chunkSize);
+        int cy = Mathf.RoundToInt(worldPosXZ.y / chunkSize);
+        return terrainChunkDictionary.TryGetValue(new Vector2(cx, cy), out var chunk) ? chunk : null;
+    }
 
+    public bool IsChunkReadyAt(Vector2 worldPosXZ)
+    {
+        var chunk = GetChunkAt(worldPosXZ);
+        return chunk != null && chunk.MeshReady;
+    }
     public class TerrainChunk
     {
         public GameObject MeshObject => meshObject;
         public Vector2 Position => pos;
         public MapData MapData => mapData;
         public bool MapDataReady => mapDataReceived;
+        public bool MeshReady;
 
-         GameObject meshObject;
-         Vector2 pos;
+        GameObject meshObject;
+        Vector2 pos;
         Bounds bounds;
 
-         MapData mapData;
+        MapData mapData;
 
         MeshRenderer meshRenderer;
         MeshFilter meshFilter;
@@ -85,11 +130,14 @@ public class EndlessWorld : MonoBehaviour
         LODMesh[] lodMeshes;
         LODMesh collisionLODMesh;
 
-         bool mapDataReceived;
+        bool mapDataReceived;
         int previousLODIndex = -1;
-        public TerrainChunk(Vector2 coord, int size, LevelOfDetailInfo[] detailLevel, Transform parent, Material mat)
+        int myVersion;
+        public TerrainChunk(Vector2 coord, int size, LevelOfDetailInfo[] detailLevel, Transform parent, Material mat, int version)
         {
+            myVersion = version;
             this.detailLevel = detailLevel;
+            this.MeshReady = false;
             pos = coord * size;
             bounds = new Bounds(pos, Vector2.one * size);
             Vector3 posv3 = new Vector3(pos.x, 0, pos.y);
@@ -113,11 +161,13 @@ public class EndlessWorld : MonoBehaviour
                     collisionLODMesh = lodMeshes[i];
                 }
             }
-            mapGenerator.RequestMapData(pos,OnMapDataReceived);
+            mapGenerator.RequestMapData(pos, OnMapDataReceived);
         }
 
         void OnMapDataReceived(MapData mapData)
         {
+            if (myVersion != currentGenerationVersion) return; 
+
             this.mapData = mapData;
             mapDataReceived = true;
             Texture2D texture = TextureGenerator.TextureFromColorMap(mapData.colorMap, MapGenerator.mapChunkSize, MapGenerator.mapChunkSize);
@@ -126,7 +176,7 @@ public class EndlessWorld : MonoBehaviour
         }
         public void Update()
         {
-            if(!mapDataReceived)
+            if (!mapDataReceived)
             {
                 return;
             }
@@ -146,7 +196,7 @@ public class EndlessWorld : MonoBehaviour
                         break;
                     }
                 }
-                if(lodIndex != previousLODIndex)
+                if (lodIndex != previousLODIndex)
                 {
                     LODMesh lodMesh = lodMeshes[lodIndex];
                     if (lodMesh.hasMesh)
@@ -161,9 +211,11 @@ public class EndlessWorld : MonoBehaviour
                 }
                 if (lodIndex == 0)
                 {
-                    if(collisionLODMesh.hasMesh)
+                    if (collisionLODMesh.hasMesh)
                     {
                         meshCollider.sharedMesh = collisionLODMesh.mesh;
+                        MeshReady = true;
+                        FindFirstObjectByType<SpiderFormation>().SnapAllSpiders();
                     }
                     else if (!collisionLODMesh.hasRequestedMesh)
                     {

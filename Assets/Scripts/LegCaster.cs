@@ -110,47 +110,9 @@ public class LegCaster : MonoBehaviour
             GroundNormal = bestHit.normal;
             Debug.DrawRay(bestHit.point, bestHit.normal * 1f, Color.purple);
         }
-        //GroundCorrect();
+        
         // if nothing found at all, foot just stays exactly where it was last frame — no snapping, no falling through
     }
 
-    public void GroundCorrect()
-    {
-        float checkRadius = 0.1f;
-        float snapSpeed = 5f;
-
-        // Check if touching ground from above (normal) or below (upside down)
-        bool touchingFromAbove = Physics.Raycast(
-            driverController.transform.position + Vector3.up * 0.1f, Vector3.down, checkRadius, LayerMask.GetMask("Ground"));
-        bool touchingFromBelow = Physics.Raycast(
-            driverController.transform.position - Vector3.up * 0.1f, Vector3.up, checkRadius, LayerMask.GetMask("Ground"));
-        grounded = true;
-        if (touchingFromAbove || touchingFromBelow) return;
-        grounded = false;
-        // Not touching ground at all — find it
-        RaycastHit upHit, downHit;
-        bool hitAbove = Physics.Raycast(driverController.transform.position, Vector3.up, out upHit, Mathf.Infinity, LayerMask.GetMask("Ground"));
-        bool hitBelow = Physics.Raycast(driverController.transform.position, Vector3.down, out downHit, Mathf.Infinity, LayerMask.GetMask("Ground"));
-
-        if (hitAbove && hitBelow)
-        {
-            // Pick whichever surface is closer
-            float distUp = upHit.distance;
-            float distDown = downHit.distance;
-            Vector3 target = distDown <= distUp ? downHit.point : upHit.point;
-            driverController.transform.position = Vector3.MoveTowards(driverController.transform.position, target, snapSpeed * Time.deltaTime);
-        }
-        else if (hitBelow)
-        {
-            driverController.transform.position = Vector3.MoveTowards(
-                driverController.transform.position, downHit.point, snapSpeed * Time.deltaTime);
-        }
-        else if (hitAbove)
-        {
-            Debug.Log("below ground");
-            // Below ground — move up toward surface
-            driverController.transform.position = Vector3.MoveTowards(
-                driverController.transform.position, upHit.point, snapSpeed * Time.deltaTime);
-        }
-    }
+    
 }

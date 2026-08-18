@@ -1,0 +1,7 @@
+elapsedSec,runLabel,chunkCount,avgFrameMs,maxFrameMsSoFar,stutterFrameCountSoFar,allocatedMemoryBytes
+23.7,viewdist_400_rapidmovement,81,23684.720,23684.720,1,504254321
+25.3,viewdist_400_rapidmovement,81,12671.880,23684.720,2,592859748
+26.7,viewdist_400_rapidmovement,81,6675.897,23684.720,4,664065070
+27.8,viewdist_400_rapidmovement,81,5564.827,23684.720,5,730670377
+28.8,viewdist_400_rapidmovement,81,443.518,23684.720,6,734477749
+29.8,viewdist_400_rapidmovement,81,233.182,23684.720,8,738170327
