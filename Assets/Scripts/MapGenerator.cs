@@ -251,7 +251,7 @@ public class MapGenerator : MonoBehaviour
             for (int x = 0; x < mapChunkSize; x++)
             {
                 float h = continentalnessCurve.Evaluate(rMap[x, y]) 
-                    + (erosionCurve.Evaluate(eMap[x, y])) * peaksValleysCurve.Evaluate(pvMap[x, y]);
+                   + (erosionCurve.Evaluate(eMap[x, y]))  * peaksValleysCurve.Evaluate(pvMap[x, y]);
 
                 result[x, y] = h;
             }
