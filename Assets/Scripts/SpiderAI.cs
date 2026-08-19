@@ -229,7 +229,6 @@ public class SpiderAI : MonoBehaviour
         if (half) return;
         if (_activeDisguise == null && disguisePrefabs != null && disguisePrefabs.Length > 0)
         {
-            // Use instance ID as part of seed so each spider picks differently
             int idx = (GetInstanceID() + (int)(_settleTimer * 100)) % disguisePrefabs.Length;
             idx = Mathf.Abs(idx);
             _activeDisguisePrefab = disguisePrefabs[idx];
@@ -315,7 +314,6 @@ public class SpiderAI : MonoBehaviour
 
         if (dot <= threshold) return false;
 
-        // In angle — now check if terrain blocks line of sight
         Vector3 eyePos = player.position + Vector3.up * 0.5f;
         Vector3 spiderPos = bodyTransform.position + Vector3.up * 0.1f;
         Vector3 dir = (spiderPos - eyePos).normalized;

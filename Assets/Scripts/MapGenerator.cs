@@ -300,7 +300,7 @@ public class MapGenerator : MonoBehaviour
     [ContextMenu("Export Noise Debug CSV")]
     public void ExportNoiseDebugCSV()
     {
-        Vector2 centre = Vector2.zero; // change if you want a different chunk (e.g. one that straddles the river)
+        Vector2 centre = Vector2.zero;
 
         AnimationCurve continentalnessCopy = new AnimationCurve(riverMaskSpline.keys);
         AnimationCurve erosionCopy = new AnimationCurve(erosionSpline.keys);
@@ -312,8 +312,6 @@ public class MapGenerator : MonoBehaviour
         float[,] eMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed + 1337, eScale, eOctaves, ePersistence, eLacunarity, sampleOffset);
         float[,] pvMap = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, seed + 2674, pvScale, pvOctaves, pvPersistence, pvLacunarity, sampleOffset);
 
-        // Replicate the EXACT normalization bounds used in CombineNoiseMaps
-        // (based on spline control-point extremes, not actual sampled min/max)
         var cKeys = continentalnessCopy.keys;
         var eKeys = erosionCopy.keys;
         var pvKeys = peaksValleysCopy.keys;
@@ -368,10 +366,6 @@ public class MapGenerator : MonoBehaviour
         var singleThreadTimes = new System.Collections.Generic.List<double>();
         var threadedTimes = new System.Collections.Generic.List<double>();
 
-        // Single-threaded (synchronous, blocking) timing.
-        // Each run uses a unique centre so every call does genuinely fresh
-        // noise sampling rather than possibly benefiting from CPU caching
-        // effects of repeating the exact same coordinates.
         for (int i = 0; i < runs; i++)
         {
             Vector2 centre = new Vector2(i * 240, 0);
@@ -382,13 +376,9 @@ public class MapGenerator : MonoBehaviour
             yield return null;
         }
 
-        // Threaded (wall-clock) timing: measures perceived latency from
-        // request to callback firing, i.e. thread spin-up + generation +
-        // waiting for the next Update() to dequeue it. This is the number
-        // that matches what the player actually experiences.
         for (int i = 0; i < runs; i++)
         {
-            Vector2 centre = new Vector2(i * 240, 100000); // offset so it never overlaps the single-thread test chunks
+            Vector2 centre = new Vector2(i * 240, 100000); 
             double startTime = Time.realtimeSinceStartupAsDouble;
             bool done = false;
             double elapsedMs = 0;
@@ -424,8 +414,6 @@ public class MapGenerator : MonoBehaviour
     }
 
 
-    // ---- METRIC: Triangle/vertex count per LOD level ----
-    // Does NOT require play mode.
     [ContextMenu("Log Triangle Counts Per LOD")]
     public void LogTriangleCountsPerLOD()
     {

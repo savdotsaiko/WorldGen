@@ -1,15 +1,9 @@
 using UnityEngine;
 
-// ============================================================
-// NEW STANDALONE SCRIPT — does not need to be pasted anywhere.
-// Create an empty GameObject, add this component to it.
-// Works in Edit Mode or Play Mode (no coroutines needed).
-// Right-click the component header -> "Run Noise Scaling Benchmark".
-// ============================================================
 public class NoiseScalingBenchmark : MonoBehaviour
 {
     [Header("Test range")]
-    public int mapSize = 241; // match MapGenerator.mapChunkSize
+    public int mapSize = 241; 
     public int minOctaves = 1;
     public int maxOctaves = 10;
     public int runsPerOctaveCount = 5;

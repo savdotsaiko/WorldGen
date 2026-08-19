@@ -2,20 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 
-// ============================================================
-// NEW STANDALONE SCRIPT. Create an empty GameObject, add this
-// component, and drag your scene's EndlessWorld object into the
-// endlessWorld field.
-//
-// WORKFLOW (repeat once per view-distance value you want to test):
-//   1. In Edit Mode, change the LAST entry's "threshold" value in
-//      your EndlessWorld component's detailLevels array (this sets
-//      maxViewDistance) to the value you're testing.
-//   2. Set runLabel to describe it, e.g. "viewdist_300".
-//   3. Enter Play Mode, move around for totalDuration seconds.
-//   4. It writes a CSV and disables itself. Exit Play Mode.
-//   5. Repeat with the next view distance value.
-// ============================================================
 public class ViewDistanceBenchmark : MonoBehaviour
 {
     public string runLabel = "viewdist_300";
@@ -23,7 +9,7 @@ public class ViewDistanceBenchmark : MonoBehaviour
     public float totalDuration = 30f;
     public EndlessWorld endlessWorld;
 
-    private const float STUTTER_THRESHOLD_MS = 50f; // ~20fps or worse counts as a stutter frame
+    private const float STUTTER_THRESHOLD_MS = 50f;
 
     private float _timer, _elapsed;
     private readonly List<string> _rows = new();

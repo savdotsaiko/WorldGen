@@ -12,7 +12,7 @@ public class BodyOrienter : MonoBehaviour
     public float normalSmoothSpeed = 6f;
 
     private Vector3 smoothedNormal = Vector3.up;
-    public Vector3 CurrentSurfaceNormal => smoothedNormal; // expose the smoothed value, not raw avgNormal
+    public Vector3 CurrentSurfaceNormal => smoothedNormal; 
 
     void Update()
     {
@@ -28,7 +28,6 @@ public class BodyOrienter : MonoBehaviour
         if (count == 0) return;
         rawAvgNormal = (rawAvgNormal / count).normalized;
 
-        // low-pass filter the normal itself, before anything downstream reads it
         smoothedNormal = Vector3.Slerp(smoothedNormal, rawAvgNormal, Time.deltaTime * normalSmoothSpeed).normalized;
         Vector3 avgNormal = smoothedNormal;
 

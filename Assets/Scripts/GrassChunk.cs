@@ -21,7 +21,6 @@ public class GrassChunk : MonoBehaviour
     private Bounds _drawBounds;
     public LayerMask groundMask;
 
-    // Called by your TerrainChunk after the mesh is ready
     public void Initialise(float chunkWorldSize, Vector3 chunkOrigin,
                        float[,] heightMap, float heightMultiplier,
                        AnimationCurve heightCurve,
@@ -42,7 +41,6 @@ public class GrassChunk : MonoBehaviour
         _material.SetBuffer("_InstanceBuffer", _instanceBuffer);
         Debug.Log($"Buffer set with {_instanceCount} instances. Material: {_material != null} Mesh: {_mesh != null} Args: {_argsBuffer != null}");
 
-        // Indirect args buffer: indexCount, instanceCount, startIndex, baseVertex, startInstance
         uint[] args = new uint[5];
         args[0] = (uint)_mesh.GetIndexCount(0);
         args[1] = (uint)_instanceCount;

@@ -1,8 +1,5 @@
 using UnityEngine;
 
-// Attach one to each per-layer UI panel (Continentalness / Erosion / PeaksValleys).
-// Set layerIndex to match NoiseVisualizerDemo.layers order (0/1/2), then wire each
-// UI control's OnValueChanged event to the matching method here.
 public class NoiseLayerUIPanel : MonoBehaviour
 {
     public NoiseVisualizerDemo controller;

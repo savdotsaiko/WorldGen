@@ -1,8 +1,5 @@
 using UnityEngine;
 
-// Standalone demo scene controller - NOT part of your endless-world pipeline.
-// Reuses Noise.GenerateNoiseMap (Noise.cs) and the TerrainType struct (MapGenerator.cs)
-// but generates its own small flat->warped plane so it can run synchronously on the main thread.
 public class NoiseVisualizerDemo : MonoBehaviour
 {
     public enum ViewMode { Idle, Continentalness, Erosion, PeaksValleys, Combined }
@@ -43,7 +40,7 @@ public class NoiseVisualizerDemo : MonoBehaviour
     public int seed = 0;
     public Vector2 offset;
     public float heightMultiplier = 20f;
-    public TerrainType[] regions; // reused for Combined+Texture, mirrors MapGenerator's region colouring
+    public TerrainType[] regions; 
 
     [Header("View State")]
     public ViewMode viewMode = ViewMode.Idle;
@@ -68,8 +65,6 @@ public class NoiseVisualizerDemo : MonoBehaviour
     Color[] currentColors;
     Color[] targetColors;
 
-    // Cached post-curve, pre-heightMultiplier value per vertex (0..1-ish).
-    // Lets height-multiplier / display-mode changes skip a full noise regen.
     float[] lastNormalizedHeight;
 
     Texture2D displayTexture;
@@ -112,7 +107,6 @@ public class NoiseVisualizerDemo : MonoBehaviour
         }
     }
 
-    // ---------- mesh setup ----------
 
     void BuildBaseMesh()
     {
@@ -142,7 +136,6 @@ public class NoiseVisualizerDemo : MonoBehaviour
 
                 if (x < mapSize - 1 && y < mapSize - 1)
                 {
-                    // same winding as MeshGenerator.GenerateTerrainMesh
                     triangles[t++] = i; triangles[t++] = i + mapSize + 1; triangles[t++] = i + mapSize;
                     triangles[t++] = i + mapSize + 1; triangles[t++] = i; triangles[t++] = i + 1;
                 }
@@ -225,8 +218,6 @@ public class NoiseVisualizerDemo : MonoBehaviour
         {
             for (int x = 0; x < mapSize; x++)
             {
-                // mirrors MapGenerator.CombineNoiseMaps, but each layer is individually toggleable
-                // for the demo. PeaksValleys is a multiplier, so it defaults to 1 (not 0) when off.
                 float cV = c.enabled ? c.curve.Evaluate(cMap[x, y]) : 0f;
                 float eV = e.enabled ? e.curve.Evaluate(eMap[x, y]) : 0f;
                 float pvV = pv.enabled ? pv.curve.Evaluate(pvMap[x, y]) : 1f;
@@ -261,7 +252,6 @@ public class NoiseVisualizerDemo : MonoBehaviour
         return regions[regions.Length - 1].color;
     }
 
-    // Reapplies heightMultiplier / displayMode to the cached normalized noise without regenerating it.
     void ApplyHeightMultiplierOnly()
     {
         bool flatten = viewMode == ViewMode.Idle || displayMode == DisplayMode.Texture;
@@ -270,12 +260,11 @@ public class NoiseVisualizerDemo : MonoBehaviour
         textureDirty = true;
     }
 
-    // ---------- transition + apply ----------
 
     bool LerpTowardsTarget()
     {
         bool stillMoving = false;
-        float t = 1f - Mathf.Exp(-lerpSpeed * Time.deltaTime); // framerate-independent exponential smoothing
+        float t = 1f - Mathf.Exp(-lerpSpeed * Time.deltaTime); 
 
         for (int i = 0; i < currentHeights.Length; i++)
         {
@@ -308,12 +297,11 @@ public class NoiseVisualizerDemo : MonoBehaviour
 
     void ApplyTexture()
     {
-        displayTexture.SetPixels(currentColors); // currentColors is row-major y*mapSize+x, matches SetPixels layout
+        displayTexture.SetPixels(currentColors); 
         displayTexture.Apply(false);
         if (material != null) material.mainTexture = displayTexture;
     }
 
-    // ---------- public API for UI ----------
 
     public void SetViewMode(int i)
     {

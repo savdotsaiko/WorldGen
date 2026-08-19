@@ -2,28 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 
-// ============================================================
-// NEW STANDALONE SCRIPT. Create an empty GameObject in your
-// gameplay scene, add this component to it.
-//
-// WORKFLOW (repeat once per density value you want to test):
-//   1. In Edit Mode, set GrassManager.densityPerChunkSide (and/or
-//      the relevant ObjectPlacementSettings.countPerChunk asset)
-//      to the value you're testing.
-//   2. Set this component's runLabel to describe that value,
-//      e.g. "grass_density_20".
-//   3. Enter Play Mode and move/fly around so new chunks stream
-//      in and grass/objects get placed.
-//   4. Wait for totalDuration seconds — it writes a CSV and
-//      disables itself automatically. Exit Play Mode.
-//   5. Repeat with the next density value and a new runLabel.
-//   6. Move all resulting ScatteringBenchmark_*.csv files into
-//      one folder for the Python analysis step.
-//
-// NOTE: this requires GrassChunk and ObjectChunk to each expose
-// a public count property — see the two one-line additions in
-// INSTRUCTIONS.md before this will compile.
-// ============================================================
 public class ScatteringBenchmark : MonoBehaviour
 {
     [Tooltip("Label for this run, e.g. the density value being tested. Set manually before each run.")]

@@ -16,7 +16,7 @@ public class LegCaster : MonoBehaviour
     public bool grounded;
     [Header("Fallback fan search")]
     public int fanRayCount = 6;
-    public float fanAngle = 45f; // max degrees to tilt away from main direction
+    public float fanAngle = 45f; 
 
     public Vector3 GroundNormal { get; private set; } = Vector3.up;
     private LegStepper _stepper;

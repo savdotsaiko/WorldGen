@@ -57,7 +57,7 @@ public class EndlessWorld : MonoBehaviour
     private int generationVersion = 0;
     public void RegenerateWorld()
     {
-        currentGenerationVersion++; // add this — invalidates all in-flight requests from before this call
+        currentGenerationVersion++; 
         allChunksLoaded = false;
         FindFirstObjectByType<SpiderFormation>().SnapAllSpiders();
         mapGenerator.seed = Random.Range(0, int.MaxValue);
